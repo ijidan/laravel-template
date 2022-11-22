@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+start
+:ClickServlet.handleRequest();
+:new page;
+if (是否包含"点击图片，加入移民交流群”或者“点击图片，加入海房交流群") then (true)
+  :Page.onInit();
+  if (isForward?) then (no)
+    :Process controls;
+    if (continue processing?) then (no)
+      stop
+    endif
+
+    if (isPost?) then (yes)
+      :Page.onPost();
+    else (no)
+      :Page.onGet();
+    endif
+    :Page.onRender();
+  endif
+else (false)
+endif
+
+if (do redirect?) then (yes)
+  :redirect process;
+else
+  if (do forward?) then (yes)
+    :Forward request;
+  else (no)
+    :Render page template;
+  endif
+endif
+
+stop
+
+@enduml
