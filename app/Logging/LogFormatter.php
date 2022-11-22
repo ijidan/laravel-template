@@ -5,6 +5,7 @@ namespace App\Logging;
 use Illuminate\Log\Logger;
 use Monolog\Formatter\LineFormatter;
 use App\Repository\UniContextRepo;
+use Monolog\Formatter\JsonFormatter;
 
 /**
  * Class LogFormatter
@@ -22,7 +23,8 @@ class LogFormatter {
             $uuid = $uniContext->getUuid();
             $rawFormat = '[%datetime%] %channel%.%level_name%: %message% %context% %extra%';
             $format = sprintf('%s %s%s', $uuid, $rawFormat, PHP_EOL);
-            $handler->setFormatter(new LineFormatter($format,'Y-m-d H:i:s'));
+            $handler->setFormatter(new JsonFormatter());
+            //$handler->setFormatter(new LineFormatter($format,'Y-m-d H:i:s'));
         }
     }
 }
