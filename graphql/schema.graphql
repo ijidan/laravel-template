@@ -17,11 +17,8 @@ type Query {
       "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
       name: String @where(operator: "like")
     ): [User!]! @paginate(defaultCount: 10)
-
-    "根据手机号码查询用户"
-    userByMobile(
-        mobile: String @eq
-    ): User @find
+    hello(name:String="world!"):String!
+    UserByMobile:User!
 }
 
 "Account of a person who utilizes this application."

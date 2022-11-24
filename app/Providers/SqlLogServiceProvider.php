@@ -33,9 +33,9 @@ class SqlLogServiceProvider extends ServiceProvider {
                 'sql'      => $realSql,
                 'duration' => $duration
             ];
-            if(!Str::contains($realSql,'telescope_entries')){
+            if (!Str::contains($realSql, 'telescope_entries')) {
                 //$content = sprintf('[%s]-[%s] %s', $query->connection->getDatabaseName(), $duration, $realSql);
-                Log::info('sql', ['data' => $content]);
+                Log::info('sql', $content);
             }
         });
     }

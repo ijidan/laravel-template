@@ -23,8 +23,25 @@ class LogFormatter {
             $uuid = $uniContext->getUuid();
             $rawFormat = '[%datetime%] %channel%.%level_name%: %message% %context% %extra%';
             $format = sprintf('%s %s%s', $uuid, $rawFormat, PHP_EOL);
-            $handler->setFormatter(new JsonFormatter());
             //$handler->setFormatter(new LineFormatter($format,'Y-m-d H:i:s'));
+
+            $record = [
+                'datetime'   => '%datetime%',
+                'channel'    => '%channel%',
+                'level_name' => '%level_name%',
+                'message'    => '%message%',
+                'context'    => '%context%',
+                'extra'      => '%extra%'
+            ];
+            $format = new JsonFormatter();
+            $format->includeStacktraces(true);
+            $format->setDateFormat('Y-m-d H:i:s');
+            $format->format($record);
+            $handler->setFormatter($format);
+            $handler->pushProcessor(function ($record) {
+                $record['id'] = uuid_create(UUID_TYPE_TIME);
+                return $record;
+            });
         }
     }
 }

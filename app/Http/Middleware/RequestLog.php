@@ -12,22 +12,19 @@ use Illuminate\Http\JsonResponse;
  * Class UniContext
  * @package App\Http\Middleware
  */
-class RequestLog
-{
+class RequestLog {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
-    {
-        Log::info('request',['data'=>$request->toArray()]);
-        $response=$next($request);
-        if($response instanceof JsonResponse){
-            Log::info('response',['data'=>$response->getData(true)]);
+    public function handle(Request $request, Closure $next) {
+        Log::info('request', $request->toArray());
+        $response = $next($request);
+        if ($response instanceof JsonResponse) {
+            Log::info('response', $response->getData(true));
         }
-        return  $response;
+        return $response;
     }
 }
