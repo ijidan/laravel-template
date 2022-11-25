@@ -13,6 +13,8 @@ use Illuminate\Http\JsonResponse;
  * @package App\Http\Middleware
  */
 class RequestLog {
+
+
     /**
      * Handle an incoming request.
      * @param \Illuminate\Http\Request $request
@@ -20,10 +22,14 @@ class RequestLog {
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
     public function handle(Request $request, Closure $next) {
-        Log::info('request', $request->toArray());
+        $requestReceiveTime = microtime(true);
+        $requestData = array_merge($request->toArray(), ['start_time' => LARAVEL_START, 'end_time'=> $requestReceiveTime, 'duration'=> bcsub($requestReceiveTime,LARAVEL_START,6),'log_type'=>'request']);
+        Log::info('request', $requestData);
         $response = $next($request);
         if ($response instanceof JsonResponse) {
-            Log::info('response', $response->getData(true));
+            $responseEndTime=microtime(true);
+            $responseData = array_merge($response->getData(true), ['start_time' => $requestReceiveTime, 'end_time'   => $responseEndTime,'duration'=> bcsub($responseEndTime,$requestReceiveTime,6), 'log_type'=>'response']);
+            Log::info('response', $responseData);
         }
         return $response;
     }

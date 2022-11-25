@@ -40,6 +40,14 @@ class LogFormatter {
             $handler->setFormatter($format);
             $handler->pushProcessor(function ($record) {
                 $record['id'] = uuid_create(UUID_TYPE_TIME);
+                $context = $record['context'];
+                if (isset($context['log_type'])) {
+                    $type = $context['log_type'];
+                    unset($context['log_type']);
+                } else {
+                    $type = 'info';
+                }
+                $record['type'] = $type;
                 return $record;
             });
         }
